@@ -1,0 +1,5 @@
+cron:
+- description: update space
+  url: /parking_all_regex_rest
+  schedule: every 2 minutes
+  timezone: Asia/Taipei

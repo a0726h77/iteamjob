@@ -1,0 +1,42 @@
+﻿application: iteamjob
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /images
+  static_dir: images
+  
+- url: /parking_update
+  script: parking_update.py
+  
+- url: /parking_add
+  script: parking_add.py
+
+- url: /parking_save
+  script: parking_save.py  
+  
+- url: /rest/.*
+  script: api_v1.py
+  
+- url: /parking_group_regex
+  script: parking_group_regex.py
+  
+- url: /parking_view
+  script: parking_view.py
+  
+- url: /parking_all_regex_db
+  script: parking_all_regex_db.py
+
+- url: /parking_group_regex_db
+  script: parking_group_regex_db.py
+  
+- url: /parking_all_regex_rest
+  script: parking_all_regex_rest.py
+  
+- url: /parking_group_regex_rest
+  script: parking_group_regex_rest.py
+  
+- url: /.*
+  script: index.py
+  
