@@ -8,13 +8,7 @@ import re
 import urllib2
 from google.appengine.ext import db
 from model_parking import Parking
-import logging
-from google.appengine.api import quota
-
-
-
-
-start = quota.get_request_cpu_usage()
+from google.appengine.api import memcache
 
 
 
@@ -205,28 +199,31 @@ except urllib2.URLError, e:
 
 
 # 將 id[]、remain_space[] 更新至 Datastore
+count = 0
 parkings = []
 for i, s in zip(id, remain_space):
     try:
         if parking[i]:
-            #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
+            _space = memcache.get("parking_%s" % i)
+            if _space is not None and _space == s:
+                pass
+            else:
+                memcache.add("parking_%s" % i, s, 300)
 
-	    # 使用 db 更新
-	    p = db.get(db.Key(parking[i]))
-	    p.space = s.decode('utf-8')
-	    parkings.append(p)
+                #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
+    
+                # 使用 db 更新
+                p = db.get(db.Key(parking[i]))
+                p.space = s.decode('utf-8')
+                parkings.append(p)
+
+                count += 1
     except:
-	#print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
+        #print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
         pass
 db.put(parkings)
 
-
-
-
-end = quota.get_request_cpu_usage()
-
-
-
-
-logging.info("'parking_all_regex_db once put' use %d megacycles." % (start - end))
+print "Content-Type: text/plain"
+print ""
+print "Updated : %s" % count
 

@@ -205,7 +205,7 @@ for i, s in zip(id, remain_space):
             if _space is not None and _space == s:
                 pass
             else:
-                memcache.add("parking_%s" % i, s, 70)
+                memcache.add("parking_%s" % i, s, 300)
                     
                 #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
  
