@@ -197,23 +197,27 @@ except urllib2.URLError, e:
 
 
 # 將 id[]、remain_space[] 更新至 Datastore
+count = 0
 for i, s in zip(id, remain_space):
     try:
         if parking[i]:
             _space = memcache.get("parking_%s" % i)
-            if _space is not None:
-                if s == _space:
-                    pass
-                else
-                    memcache.add("parking_%s" % i, s, 70):
-                        
-                    #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
+            if _space is not None and _space == s:
+                pass
+            else:
+                memcache.add("parking_%s" % i, s, 70)
+                    
+                #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
  
-                    # 使用 REST API 更新
-                    xml_data = "<parking><space>%s</space></parking>" % s
-                    request = urllib2.Request('http://iteamjob.appspot.com/rest/parking/%s' % parking[i], xml_data)
-                    urllib2.urlopen(request)
-     except:
+                # 使用 REST API 更新
+                xml_data = "<parking><space>%s</space></parking>" % s
+                request = urllib2.Request('http://iteamjob.appspot.com/rest/parking/%s' % parking[i], xml_data)
+                urllib2.urlopen(request)
+		count += 1
+    except:
         #print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
         pass
+print "Content-Type: text/plain"
+print ""
+print "Updated : %s" % count
 
