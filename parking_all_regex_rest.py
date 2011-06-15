@@ -6,6 +6,7 @@
 
 import re
 import urllib2
+from google.appengine.api import memcache
 
 
 
@@ -198,14 +199,21 @@ except urllib2.URLError, e:
 # 將 id[]、remain_space[] 更新至 Datastore
 for i, s in zip(id, remain_space):
     try:
-	if parking[i]:
-            #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
-
-	    # 使用 REST API 更新
-            xml_data = "<parking><space>%s</space></parking>" % s
-            request = urllib2.Request('http://iteamjob.appspot.com/rest/parking/%s' % parking[i], xml_data)
-            urllib2.urlopen(request)
-    except:
-	#print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
+        if parking[i]:
+            _space = memcache.get("parking_%s" % i)
+            if _space is not None:
+                if s == _space:
+                    pass
+                else
+                    memcache.add("parking_%s" % i, s, 70):
+                        
+                    #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
+ 
+                    # 使用 REST API 更新
+                    xml_data = "<parking><space>%s</space></parking>" % s
+                    request = urllib2.Request('http://iteamjob.appspot.com/rest/parking/%s' % parking[i], xml_data)
+                    urllib2.urlopen(request)
+     except:
+        #print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
         pass
 
