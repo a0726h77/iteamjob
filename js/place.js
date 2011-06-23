@@ -1,4 +1,6 @@
-﻿    var country = new Array();    // 地區
+﻿    // 選擇地點 搜尋 停車場 即時資訊
+
+    var country = new Array();    // 地區
     country[0] = '請選擇地點';
     country[1] = '台北';
     country[2] = '台中';
