@@ -10,6 +10,9 @@ handlers:
 - url: /js
   static_dir: js
 
+- url: /sitemap
+  static_dir: sitemap
+
   
 - url: /rest/.*
   script: api_v1.py
