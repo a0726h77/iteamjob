@@ -6,6 +6,8 @@
 <link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript"
 src="http://maps.google.com/maps/api/js?sensor=false&language=zh_TW"></script> <!--載入Google map API V3--> 
+<script type="text/javascript" src="js/place.js"></script>
+
 <script  type="text/javascript">
  function init() {
     if (window.XMLHttpRequest) { // Mozilla, Safari, ...
@@ -113,23 +115,57 @@ function deleteLastPoint(){
 
 <!-- Place this tag in your head or just before your close body tag -->
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+  <script>
+    // 載入 master 選單，同時初始化 detail 選單內容
+    function loadMaster( master, detail ) {
+ 
+      master.options.length = country.length;
+      for( i = 0; i < country.length; i++ ) {
+        master.options[ i ] = new Option( country[i], country[i] );  // Option( text , value );
+      }
+ 
+      master.selectedIndex = 0;
+      doNewMaster( master, detail );
+    }
+ 
+    // 當 master 選單異動時，變更 detail 選單內容
+    function doNewMaster( master, detail ) {
+    
+      detail.options.length = city[ master.selectedIndex ].length;
+      for( i = 0; i < city[ master.selectedIndex ].length; i++ ) {
+        detail.options[ i ] = new Option( city[ master.selectedIndex ][ i ]['0'],
+                                          city[ master.selectedIndex ][ i ]['1'] );
+      }
+    }
+ 
+  </script>
+
 </head> 
-<body onload="init()">
+<body onload="init(); loadMaster(document.getElementById( 'country' ), document.getElementById( 'city' ));">
 <center>
 <form action="#" onsubmit="showAddress(this.address.value); return false"> 
  
 	<p> 
-	<input type="text" size="40" name="address" value="" /> 
+	<input type="text" size="40" name="address" value="請輸入地點" onfocus="if (value == '請輸入地點') {value =''}" onblur="if (value == '') {value='請輸入地點'}"  /> 
  
 	<input type="submit" value="GO" /> 
 	
 	<input type="button" value="Clear" onclick="clearMap();" />
 	</p> 
-</form> 
+</form>
 	<table>
-		<!-- <tr><td align='right'><a href='/parking_add'>Add</a> <g:plusone></g:plusone></td></tr> -->
-		<tr><td align='right'><a href='/where'><b>Go!</b></a> <g:plusone></g:plusone></td></tr>
-		<tr><td colspan="2">
+		<!-- <tr><td align='right'><a href='/parking_add'>Add</a></td></tr> -->
+		<tr>
+		    <td align='left'>
+                <select name="country" id="country" onChange="doNewMaster( document.getElementById( 'country' ), document.getElementById( 'city' ) );"></select>
+                <select name="city" id="city" onchange="location.href='index2?lat=' + this.options[this.options.selectedIndex].value.split(',')[0] + '&lon=' + this.options[this.options.selectedIndex].value.split(',')[1]"></select> 
+            </td>
+		    <td align='right'>
+                <a href='/where'><b>MyLocation!</b></a> <g:plusone></g:plusone>
+            </td></tr>
+		<tr>
+		<td colspan="2">
 <script type="text/javascript">
 
 var winWidth = window.document.body.clientWidth * 0.95;
