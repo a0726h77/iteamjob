@@ -15,7 +15,7 @@ class MainPage(webapp.RequestHandler):
         query = db.GqlQuery("SELECT * FROM Parking")
 
         template_values = {
-            'parkings' : query.fetch(100)
+            'parkings' : query.fetch(1000)
             }
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
