@@ -142,7 +142,9 @@ function deleteLastPoint(){
   </script>
 
 </head> 
+
 <body onload="init(); loadMaster(document.getElementById( 'country' ), document.getElementById( 'city' ));">
+
 <center>
 <form action="#" onsubmit="showAddress(this.address.value); return false"> 
  
@@ -154,26 +156,29 @@ function deleteLastPoint(){
 	<input type="button" value="Clear" onclick="clearMap();" />
 	</p> 
 </form>
-	<table>
+	<table border="0" width="90%">
 		<!-- <tr><td align='right'><a href='/parking_add'>Add</a></td></tr> -->
 		<tr>
 		    <td align='left'>
                 <select name="country" id="country" onChange="doNewMaster( document.getElementById( 'country' ), document.getElementById( 'city' ) );"></select>
                 <select name="city" id="city" onchange="location.href='index2?lat=' + this.options[this.options.selectedIndex].value.split(',')[0] + '&lon=' + this.options[this.options.selectedIndex].value.split(',')[1]"></select> 
             </td>
+	    <td></td>
 		    <td align='right'>
                 <a href='/where'><b>MyLocation!</b></a> <g:plusone></g:plusone>
             </td>
 		</tr>
-		<tr>
-		<td colspan="2">
+	</table>
 		
-<script type="text/javascript">
-var winWidth = window.document.body.clientWidth * 0.95;
-var winHeight = window.document.body.clientHeight * 0.85;
-document.write('<div id=\'map_canvas\' style=\'width: ' + winWidth + 'px; height: '+ winHeight + 'px;\'></div>');
-</script>
+    <script type="text/javascript">
+        var winWidth = window.document.body.clientWidth * 0.95;
+        var winHeight = window.document.body.clientHeight * 0.85;
+        document.write('<div id=\'map_canvas\' style=\'width: ' + winWidth + 'px; height: '+ winHeight + 'px;\'></div>');
+        </script>
 
+    <a target="_blank" href='http://code.google.com/p/iteamjob/issues/list'><b>連絡我們</b></a>
 </center>
+
 </body>
+
 </html>
