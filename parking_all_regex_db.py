@@ -198,32 +198,44 @@ except urllib2.URLError, e:
 
 
 
+print "Content-Type: text/plain"
 # 將 id[]、remain_space[] 更新至 Datastore
 count = 0
 parkings = []
 for i, s in zip(id, remain_space):
     try:
+        # 判斷 Datastore key 與停管處停車場 ID 資料對應
         if parking[i]:
             _space = memcache.get("parking_%s" % i)
-            if _space is not None and _space == s:
-                pass
-            else:
-                memcache.add("parking_%s" % i, s, 300)
+            #print parking[i]
+            #print "%s %s" % (i, _space)
 
+            # 判斷是否已經加入 memcache
+	    #if _space is None:
+            #    memcache.add("parking_%s" % i, s, 3600)
+            #    print "memcache : %s %s" % (i, s)
+
+            #if _space is not None and _space:
+            #    pass
+            if _space is not None and ( ((int(_space) - int(s)) > 5) or ((int(_space) - int(s)) < -5) ):
+                memcache.set("parking_%s" % i, s)
+                print "U %s %s" % (s, _space)
                 #print '更新 id:%s space:%s http://iteamjob.appspot.com/rest/parking/%s' % (i, s, parking[i])
-    
+
                 # 使用 db 更新
                 p = db.get(db.Key(parking[i]))
                 p.space = s.decode('utf-8')
                 parkings.append(p)
 
                 count += 1
+            else:
+                memcache.set("parking_%s" % i, _space)
+                print "N %s %s" % (s, _space)
     except:
         #print 'Datastore未建立 id %s 的資料 http://www.tpis.nat.gov.tw/Internet/showinformation.asp?id=%s' % (i, i) 
         pass
 db.put(parkings)
 
-print "Content-Type: text/plain"
 print ""
 print "Updated : %s" % count
 

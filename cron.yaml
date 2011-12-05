@@ -1,5 +1,5 @@
 cron:
 - description: update space
-  url: /parking_all_regex_rest
-  schedule: every 10 minutes
+  url: /parking_all_regex_db
+  schedule: every 2 minutes
   timezone: Asia/Taipei
